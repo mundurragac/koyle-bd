@@ -2,7 +2,7 @@ import { auth, sheets } from "@googleapis/sheets";
 import { esAlojamiento, esAsistencia, type Rsvp } from "./rsvp";
 
 // Sin nombre de hoja, el rango apunta a la primera pestaña del Sheet.
-const RANGO = "A:E";
+const RANGO = "A:F";
 
 const cliente = sheets({
   version: "v4",
@@ -26,7 +26,7 @@ export async function agregarRsvp(rsvp: Rsvp) {
     valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
     requestBody: {
-      values: [[fecha, rsvp.nombre, rsvp.asistencia, rsvp.alojamiento ?? "", rsvp.comentario]],
+      values: [[fecha, rsvp.nombre, rsvp.asistencia, rsvp.alojamiento ?? "", rsvp.comentario, rsvp.personas]],
     },
   });
 }
@@ -39,10 +39,11 @@ export async function obtenerRsvps(): Promise<Rsvp[]> {
   const { data } = await cliente.spreadsheets.values.get({ spreadsheetId, range: RANGO });
   const porNombre = new Map<string, Rsvp>();
 
-  for (const [, nombre = "", asistencia, alojamiento, comentario = ""] of data.values ?? []) {
+  for (const [, nombre = "", asistencia, alojamiento, comentario = "", personas] of data.values ?? []) {
     if (!esAsistencia(asistencia)) continue;
     porNombre.set(claveNombre(nombre), {
       nombre,
+      personas: personas === "2" ? 2 : 1,
       asistencia,
       alojamiento: esAlojamiento(alojamiento) ? alojamiento : null,
       comentario,

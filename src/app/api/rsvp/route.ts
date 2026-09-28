@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
 function validar(body: unknown): Rsvp | null {
   if (typeof body !== "object" || body === null) return null;
-  const { nombre, asistencia, alojamiento, comentario } = body as Record<string, unknown>;
+  const { nombre, personas, asistencia, alojamiento, comentario } = body as Record<string, unknown>;
 
   const nombreLimpio = typeof nombre === "string" ? nombre.trim() : "";
   if (!nombreLimpio || nombreLimpio.length > 100) return null;
@@ -30,6 +30,7 @@ function validar(body: unknown): Rsvp | null {
 
   return {
     nombre: nombreLimpio,
+    personas: personas === "2" ? 2 : 1,
     asistencia,
     alojamiento: va ? alojamientoValido : null,
     comentario: comentarioLimpio,

@@ -7,6 +7,7 @@ export type Alojamiento = (typeof ALOJAMIENTO)[number];
 
 export type Rsvp = {
   nombre: string;
+  personas: 1 | 2;
   asistencia: Asistencia;
   alojamiento: Alojamiento | null;
   comentario: string;
