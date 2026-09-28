@@ -5,6 +5,8 @@ import { CAMAS, type Rsvp } from "@/lib/rsvp";
 
 const INTERVALO_MS = 10_000;
 
+const contarPersonas = (rsvps: Rsvp[]) => rsvps.reduce((total, r) => total + r.personas, 0);
+
 export function Dashboard() {
   const [rsvps, setRsvps] = useState<Rsvp[] | null>(null);
   const [actualizado, setActualizado] = useState<Date | null>(null);
@@ -36,8 +38,8 @@ export function Dashboard() {
   }
 
   const van = rsvps.filter((r) => r.asistencia === "Sí voy");
-  const seQuedan = van.filter((r) => r.alojamiento === "Sí, me quedo").length;
-  const soloDia = van.filter((r) => r.alojamiento === "No, voy solo de día").length;
+  const seQuedan = contarPersonas(van.filter((r) => r.alojamiento === "Sí, me quedo"));
+  const soloDia = contarPersonas(van.filter((r) => r.alojamiento === "No, voy solo de día"));
   const faltanCamas = seQuedan > CAMAS;
 
   return (
@@ -79,7 +81,7 @@ function Lista({ titulo, rsvps }: { titulo: string; rsvps: Rsvp[] }) {
     <section>
       <h2 className="flex items-baseline justify-between border-b border-line pb-2 font-serif text-2xl">
         {titulo}
-        <span className="font-sans text-sm text-muted">{rsvps.length}</span>
+        <span className="font-sans text-sm text-muted">{contarPersonas(rsvps)}</span>
       </h2>
       {rsvps.length === 0 ? (
         <p className="py-3 text-sm text-muted">Nadie por ahora.</p>
@@ -88,7 +90,10 @@ function Lista({ titulo, rsvps }: { titulo: string; rsvps: Rsvp[] }) {
           {rsvps.map((r) => (
             <li key={r.nombre} className="py-3">
               <div className="flex items-center justify-between gap-3">
-                <span className="font-normal">{r.nombre}</span>
+                <span className="font-normal">
+                  {r.nombre}
+                  {r.personas === 2 && <span className="text-muted"> +1</span>}
+                </span>
                 {r.alojamiento && (
                   <span
                     className={`shrink-0 border px-2 py-0.5 text-[0.65rem] font-normal uppercase tracking-[0.16em] ${r.alojamiento === "Sí, me quedo" ? "border-gold text-gold-dark" : "border-line text-muted"}`}

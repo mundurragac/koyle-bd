@@ -46,10 +46,25 @@ export function FormularioRsvp() {
 
   return (
     <form onSubmit={enviar} className="mt-10 space-y-6">
-      <label className="block">
-        <span className="label-caps">Nombre</span>
-        <input name="nombre" required maxLength={100} autoComplete="name" className={`${campo} mt-2`} />
-      </label>
+      <div>
+        <label htmlFor="nombre" className="label-caps">
+          Nombre
+        </label>
+        <div className="mt-2 flex gap-2">
+          <input
+            id="nombre"
+            name="nombre"
+            required
+            maxLength={100}
+            autoComplete="name"
+            className={`${campo} min-w-0 flex-1`}
+          />
+          <label className="flex shrink-0 cursor-pointer items-center gap-2 border border-line bg-white px-4 transition-colors has-checked:border-gold-dark has-checked:bg-sand">
+            <input type="checkbox" name="personas" value="2" className="size-4 accent-gold-dark" />
+            Voy con +1
+          </label>
+        </div>
+      </div>
 
       <Opciones
         nombre="asistencia"
