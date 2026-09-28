@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { entrar } from "@/app/dashboard/acciones";
 import { CAMAS, type Rsvp } from "@/lib/rsvp";
 
 const INTERVALO_MS = 10_000;
@@ -11,11 +12,14 @@ export function Dashboard() {
   const [rsvps, setRsvps] = useState<Rsvp[] | null>(null);
   const [actualizado, setActualizado] = useState<Date | null>(null);
   const [error, setError] = useState(false);
+  const [bloqueado, setBloqueado] = useState(false);
 
   useEffect(() => {
+    if (bloqueado) return;
     async function cargar() {
       try {
         const res = await fetch("/api/rsvp", { cache: "no-store" });
+        if (res.status === 401) return setBloqueado(true);
         if (!res.ok) throw new Error(res.statusText);
         setRsvps(await res.json());
         setActualizado(new Date());
@@ -27,7 +31,9 @@ export function Dashboard() {
     cargar();
     const id = setInterval(cargar, INTERVALO_MS);
     return () => clearInterval(id);
-  }, []);
+  }, [bloqueado]);
+
+  if (bloqueado) return <PedirClave onEntrar={() => setBloqueado(false)} />;
 
   if (!rsvps) {
     return (
@@ -108,5 +114,43 @@ function Lista({ titulo, rsvps }: { titulo: string; rsvps: Rsvp[] }) {
         </ul>
       )}
     </section>
+  );
+}
+
+function PedirClave({ onEntrar }: { onEntrar: () => void }) {
+  const [incorrecta, enviar, enviando] = useActionState(async (_: boolean, datos: FormData) => {
+    const ok = await entrar(String(datos.get("clave")));
+    if (ok) onEntrar();
+    return !ok;
+  }, false);
+
+  return (
+    <form action={enviar} className="mt-10 border border-line bg-white p-6">
+      <label htmlFor="clave" className="label-caps">
+        Clave
+      </label>
+      <div className="mt-2 flex gap-2">
+        <input
+          id="clave"
+          name="clave"
+          type="password"
+          required
+          autoComplete="current-password"
+          className="min-w-0 flex-1 border border-line bg-white px-4 py-3 outline-none transition-colors focus:border-gold-dark"
+        />
+        <button
+          type="submit"
+          disabled={enviando}
+          className="shrink-0 bg-gold px-6 text-[0.74rem] font-normal uppercase tracking-[0.16em] text-white transition-colors hover:bg-gold-dark disabled:opacity-60"
+        >
+          Entrar
+        </button>
+      </div>
+      {incorrecta && (
+        <p role="alert" className="mt-2 text-sm text-red-700">
+          Clave incorrecta.
+        </p>
+      )}
+    </form>
   );
 }
