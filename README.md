@@ -2,8 +2,8 @@
 
 Formulario de confirmación y dashboard para el fin de semana del 24 y 25 de octubre. Cada respuesta se guarda como fila en un Google Sheet.
 
-- `/` formulario de RSVP
-- `/dashboard` lista de quién va, quién no sabe y quién no va, con contador de camas (se actualiza cada 10 segundos)
+- [koyle.undurraga.cc](https://koyle.undurraga.cc) formulario de RSVP
+- [koyle.undurraga.cc/dashboard](https://koyle.undurraga.cc/dashboard) lista de quién va, quién no sabe y quién no va, con contador de camas (se actualiza cada 10 segundos)
 
 Stack: Next.js (App Router) + TypeScript + Tailwind, Google Sheets API con cuenta de servicio (`@googleapis/sheets`), deploy en Vercel.
 
