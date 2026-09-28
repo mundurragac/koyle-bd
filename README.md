@@ -35,6 +35,7 @@ Crea `.env.local` en la raíz del proyecto:
 GOOGLE_SHEET_ID=ID_del_paso_1
 GOOGLE_SERVICE_ACCOUNT_EMAIL=rsvp-vina@tu-proyecto.iam.gserviceaccount.com
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIE...\n-----END PRIVATE KEY-----\n"
+DASHBOARD_CLAVE=clave_para_ver_el_dashboard
 ```
 
 `GOOGLE_PRIVATE_KEY` es el valor de `private_key` del JSON tal cual, con los `\n` incluidos y entre comillas dobles.
@@ -54,7 +55,7 @@ Opción A, con GitHub:
 
 1. Sube el proyecto a un repo de GitHub.
 2. En [vercel.com/new](https://vercel.com/new) importa el repo. Vercel detecta Next.js solo.
-3. Antes de hacer deploy, en **Environment Variables** agrega las tres variables del paso 4. En `GOOGLE_PRIVATE_KEY` pega el valor sin las comillas externas (sirve con `\n` literales o con saltos de línea reales).
+3. Antes de hacer deploy, en **Environment Variables** agrega las cuatro variables del paso 4. En `GOOGLE_PRIVATE_KEY` pega el valor sin las comillas externas (sirve con `\n` literales o con saltos de línea reales).
 4. Deploy.
 
 Opción B, con la CLI:
@@ -65,6 +66,7 @@ vercel link
 vercel env add GOOGLE_SHEET_ID
 vercel env add GOOGLE_SERVICE_ACCOUNT_EMAIL
 vercel env add GOOGLE_PRIVATE_KEY
+vercel env add DASHBOARD_CLAVE
 vercel --prod
 ```
 
@@ -74,15 +76,17 @@ Si cambias una variable de entorno después del deploy, tienes que volver a hace
 
 - Si una persona responde más de una vez con el mismo nombre (sin importar mayúsculas ni tildes), el dashboard considera solo su última respuesta. En el Sheet quedan todas las filas.
 - La cantidad de camas está en `CAMAS` en `src/lib/rsvp.ts`. Si los que se quedan superan ese número, la tarjeta del dashboard se pone en rojo.
-- El dashboard es público para quien tenga la URL, incluidos los comentarios.
+- El dashboard pide la clave de `DASHBOARD_CLAVE` y, si es correcta, la recuerda 90 días en una cookie. El formulario sigue abierto.
 
 ## Estructura
 
 ```
 src/
+  proxy.ts                 exige la clave en el GET de /api/rsvp
   app/
     page.tsx               formulario
     dashboard/page.tsx     dashboard
+    dashboard/acciones.ts  valida la clave y deja la cookie
     api/rsvp/route.ts      GET lista respuestas, POST agrega una fila
   components/
     formulario-rsvp.tsx
