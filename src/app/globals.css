@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-cream: #fbf9f5;
+  --color-sand: #f5f1e9;
+  --color-line: #e7e0d4;
+  --color-gold: #c6a664;
+  --color-gold-dark: #ac8a4c;
+  --color-ink: #2b2926;
+  --color-muted: #6f6a62;
+  --font-sans: var(--font-jost);
+  --font-serif: var(--font-cormorant);
+}
+
+@utility label-caps {
+  @apply font-sans text-[0.72rem] font-normal uppercase tracking-[0.22em];
+}
+
+body {
+  @apply bg-cream font-light tracking-[0.01em] text-ink;
+}
