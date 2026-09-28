@@ -10,7 +10,7 @@ Stack: Next.js (App Router) + TypeScript + Tailwind, Google Sheets API con cuent
 ## 1. Crear el Google Sheet
 
 1. Crea un Sheet nuevo en [sheets.google.com](https://sheets.google.com).
-2. En la fila 1 de la primera pestaña escribe los encabezados: `Fecha | Nombre | Asistencia | Alojamiento | Comentario`.
+2. En la fila 1 de la primera pestaña escribe los encabezados: `Fecha | Nombre | Asistencia | Alojamiento | Comentario | Personas`.
 3. Copia el ID del Sheet desde la URL: `https://docs.google.com/spreadsheets/d/`**`ESTE_ES_EL_ID`**`/edit`.
 
 La app lee y escribe siempre en la primera pestaña del Sheet.
