@@ -2,7 +2,9 @@ import { esAlojamiento, esAsistencia, type Rsvp } from "@/lib/rsvp";
 import { agregarRsvp, obtenerRsvps } from "@/lib/sheets";
 
 export async function GET() {
-  return Response.json(await obtenerRsvps());
+  // La CDN de Vercel cachea 10 s para no pasar la cuota de lecturas del Sheet con varios dashboards abiertos.
+  // revalidate no sirve acá: Next no cachea el GET si el archivo también exporta POST.
+  return Response.json(await obtenerRsvps(), { headers: { "Cache-Control": "s-maxage=10" } });
 }
 
 export async function POST(request: Request) {
