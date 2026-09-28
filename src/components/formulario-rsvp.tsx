@@ -61,7 +61,7 @@ export function FormularioRsvp() {
       {asistencia === "Sí voy" && (
         <Opciones
           nombre="alojamiento"
-          pregunta="¿Te quedas a alojar en la viña?"
+          pregunta="¿Te quedas a alojar?"
           opciones={ALOJAMIENTO}
         />
       )}
@@ -74,7 +74,6 @@ export function FormularioRsvp() {
           name="comentario"
           rows={3}
           maxLength={500}
-          placeholder="Alergias, con quién vas, etc."
           className={`${campo} mt-2 resize-none`}
         />
       </label>
