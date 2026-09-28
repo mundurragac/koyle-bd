@@ -1,6 +1,6 @@
 export const ASISTENCIA = ["Sí voy", "Todavía no sé", "No puedo"] as const;
 export const ALOJAMIENTO = ["Sí, me quedo", "No, voy solo de día"] as const;
-export const CAMAS = 6;
+export const CAMAS = 8;
 
 export type Asistencia = (typeof ASISTENCIA)[number];
 export type Alojamiento = (typeof ALOJAMIENTO)[number];
